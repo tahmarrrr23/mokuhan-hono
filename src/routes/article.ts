@@ -120,9 +120,16 @@ const routes = {
   }),
 };
 
+articleRoute.openapi(routes.postArticles, async (c) => {
+  const article = await db.article.create({
+    data: toArticleCreate(c.req.valid("json")),
+  });
+  return c.json(toArticleResponse(article), 201);
+});
+
 articleRoute.openapi(routes.getArticles, async (c) => {
   const articles = await db.article.findMany();
-  return c.json(articles.map(toArticleResponse));
+  return c.json(articles.map(toArticleResponse), 200);
 });
 
 articleRoute.openapi(routes.getArticlesId, async (c) => {
@@ -130,14 +137,7 @@ articleRoute.openapi(routes.getArticlesId, async (c) => {
     where: { id: c.req.param("id") },
     include: { author: true },
   });
-  return c.json(toArticleResponseWithDetails(article));
-});
-
-articleRoute.openapi(routes.postArticles, async (c) => {
-  const article = await db.article.create({
-    data: toArticleCreate(c.req.valid("json")),
-  });
-  return c.json(toArticleResponse(article));
+  return c.json(toArticleResponseWithDetails(article), 200);
 });
 
 articleRoute.openapi(routes.patchArticlesId, async (c) => {
@@ -145,12 +145,12 @@ articleRoute.openapi(routes.patchArticlesId, async (c) => {
     where: { id: c.req.param("id") },
     data: toArticleUpdate(c.req.valid("json")),
   });
-  return c.json(toArticleResponse(article));
+  return c.json(toArticleResponse(article), 200);
 });
 
 articleRoute.openapi(routes.deleteArticlesId, async (c) => {
   await db.article.delete({ where: { id: c.req.param("id") } });
-  return new Response(null);
+  return c.body(null, 204);
 });
 
 export { articleRoute };

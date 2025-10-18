@@ -139,9 +139,16 @@ const routes = {
   }),
 };
 
+userRoute.openapi(routes.postUsers, async (c) => {
+  const user = await db.user.create({
+    data: toUserCreate(c.req.valid("json")),
+  });
+  return c.json(toUserResponse(user), 201);
+});
+
 userRoute.openapi(routes.getUsers, async (c) => {
   const users = await db.user.findMany();
-  return c.json(users.map(toUserResponse));
+  return c.json(users.map(toUserResponse), 200);
 });
 
 userRoute.openapi(routes.getUsersId, async (c) => {
@@ -149,21 +156,7 @@ userRoute.openapi(routes.getUsersId, async (c) => {
     where: { id: c.req.param("id") },
     include: { articles: true },
   });
-  return c.json(toUserResponseWithDetails(user));
-});
-
-userRoute.openapi(routes.getUsersIdArticles, async (c) => {
-  const articles = await db.article.findMany({
-    where: { authorId: c.req.param("id") },
-  });
-  return c.json(articles.map(toArticleResponse));
-});
-
-userRoute.openapi(routes.postUsers, async (c) => {
-  const user = await db.user.create({
-    data: toUserCreate(c.req.valid("json")),
-  });
-  return c.json(toUserResponse(user));
+  return c.json(toUserResponseWithDetails(user), 200);
 });
 
 userRoute.openapi(routes.patchUsersId, async (c) => {
@@ -171,12 +164,19 @@ userRoute.openapi(routes.patchUsersId, async (c) => {
     where: { id: c.req.param("id") },
     data: toUserUpdate(c.req.valid("json")),
   });
-  return c.json(toUserResponse(user));
+  return c.json(toUserResponse(user), 200);
 });
 
 userRoute.openapi(routes.deleteUsersId, async (c) => {
   await db.user.delete({ where: { id: c.req.param("id") } });
-  return new Response(null);
+  return c.body(null, 204);
+});
+
+userRoute.openapi(routes.getUsersIdArticles, async (c) => {
+  const articles = await db.article.findMany({
+    where: { authorId: c.req.param("id") },
+  });
+  return c.json(articles.map(toArticleResponse), 200);
 });
 
 export { userRoute };
