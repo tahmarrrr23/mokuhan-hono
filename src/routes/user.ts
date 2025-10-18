@@ -1,12 +1,13 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { db } from "../libs/db.js";
+import { ArticleResponse } from "../schemas/article.js";
 import {
   UserCreate,
   UserId,
   UserResponse,
-  UserResponseWithDetails,
   UserUpdate,
 } from "../schemas/user.js";
+import { toArticleResponse } from "../services/article.js";
 import {
   toUserCreate,
   toUserResponse,
@@ -47,7 +48,25 @@ const routes = {
         description: "OK",
         content: {
           "application/json": {
-            schema: UserResponseWithDetails,
+            schema: UserResponse,
+          },
+        },
+      },
+    },
+  }),
+  getUsersIdArticles: createRoute({
+    method: "get",
+    path: "/{id}/articles",
+    tags: tags,
+    request: {
+      params: UserId,
+    },
+    responses: {
+      200: {
+        description: "OK",
+        content: {
+          "application/json": {
+            schema: z.array(ArticleResponse),
           },
         },
       },
@@ -131,6 +150,13 @@ userRoute.openapi(routes.getUsersId, async (c) => {
     include: { articles: true },
   });
   return c.json(toUserResponseWithDetails(user));
+});
+
+userRoute.openapi(routes.getUsersIdArticles, async (c) => {
+  const articles = await db.article.findMany({
+    where: { authorId: c.req.param("id") },
+  });
+  return c.json(articles.map(toArticleResponse));
 });
 
 userRoute.openapi(routes.postUsers, async (c) => {

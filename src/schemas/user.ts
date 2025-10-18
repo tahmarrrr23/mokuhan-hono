@@ -1,5 +1,4 @@
 import { z } from "@hono/zod-openapi";
-import { ArticleResponse } from "./article.js";
 
 export const UserId = z.object({
   id: z.cuid(),
@@ -22,7 +21,3 @@ export const UserCreate = UserBase.omit({
 export const UserUpdate = UserCreate.partial();
 
 export const UserResponse = UserBase;
-
-export const UserResponseWithDetails = UserResponse.extend({
-  articles: z.array(ArticleResponse),
-});
