@@ -4,12 +4,22 @@ import type {
   UserCreate,
   UserResponse,
   UserResponseWithDetails,
+  UserUpdate,
 } from "../schemas/user.js";
 import { toArticleResponse } from "./article.js";
 
-export function toUserDb(
+export function toUserCreate(
   schema: z.infer<typeof UserCreate>,
 ): Prisma.UserCreateInput {
+  return {
+    email: schema.email,
+    username: schema.username,
+  };
+}
+
+export function toUserUpdate(
+  schema: z.infer<typeof UserUpdate>,
+): Prisma.UserUpdateInput {
   return {
     email: schema.email,
     username: schema.username,

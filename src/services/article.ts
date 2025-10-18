@@ -4,12 +4,24 @@ import type {
   ArticleCreate,
   ArticleResponse,
   ArticleResponseWithDetails,
+  ArticleUpdate,
 } from "../schemas/article.js";
 import { toUserResponse } from "./user.js";
 
 export function toArticleCreate(
   schema: z.infer<typeof ArticleCreate>,
 ): Prisma.ArticleCreateInput {
+  return {
+    draft: schema.draft,
+    title: schema.title,
+    content: schema.content,
+    author: { connect: { id: schema.authorId } },
+  };
+}
+
+export function toArticleUpdate(
+  schema: z.infer<typeof ArticleUpdate>,
+): Prisma.ArticleUpdateInput {
   return {
     draft: schema.draft,
     title: schema.title,
