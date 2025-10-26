@@ -20,6 +20,8 @@ app.doc("/openapi.json", {
   info: {
     version: "",
     title: "Hono Ignition",
+    description:
+      "My personal Hono boilerplate for fast, consistent, and modern API.",
   },
 });
 
