@@ -28,12 +28,9 @@ app.doc("/openapi.json", {
   },
 });
 
-const server = serve(
-  { fetch: app.fetch, port: PORT, hostname: HOSTNAME },
-  (info) => {
-    console.log(`Server is running on http://${info.address}:${info.port}`);
-  },
-);
+const server = serve({ fetch: app.fetch, port: PORT }, (info) => {
+  console.log(`Server is running on http://localhost:${info.port}`);
+});
 
 process.on("SIGINT", () => {
   server.close();
