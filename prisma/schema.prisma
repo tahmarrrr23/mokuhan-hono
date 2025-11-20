@@ -21,14 +21,13 @@ model User {
 
 model Article {
   id        String   @id @default(cuid())
-  draft     Boolean  @default(true)
   title     String
   content   String?  @db.Text
-  authorId  String   @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String @map("author_id")
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("article")
 }
