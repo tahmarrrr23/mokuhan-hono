@@ -1,8 +1,10 @@
 import { z } from "@hono/zod-openapi";
 
-export const UserId = z.object({
-  id: z.cuid(),
-});
+export const UserId = z
+  .object({
+    id: z.cuid(),
+  })
+  .openapi("UserId");
 
 export const UserBase = z.object({
   id: UserId.shape.id,
@@ -16,8 +18,8 @@ export const UserCreate = UserBase.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-});
+}).openapi("UserCreate");
 
-export const UserUpdate = UserCreate.partial();
+export const UserUpdate = UserCreate.partial().openapi("UserUpdate");
 
-export const UserResponse = UserBase;
+export const UserRead = UserBase.openapi("UserRead");
