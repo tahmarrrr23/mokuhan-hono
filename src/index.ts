@@ -5,7 +5,6 @@ import { logger } from "hono/logger";
 import { articleRoute } from "./routes/article.js";
 import { userRoute } from "./routes/user.js";
 
-const HOSTNAME = process.env.HOSTNAME || "localhost";
 const PORT = Number(process.env.PORT) || 8080;
 
 const app = new OpenAPIHono();
