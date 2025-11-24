@@ -6,8 +6,8 @@ export function toUserCreate(
   schema: z.infer<typeof UserCreate>,
 ): Prisma.UserCreateInput {
   return {
-    email: schema.email,
     username: schema.username,
+    nickname: schema.nickname,
   };
 }
 
@@ -15,8 +15,8 @@ export function toUserUpdate(
   schema: z.infer<typeof UserUpdate>,
 ): Prisma.UserUpdateInput {
   return {
-    email: schema.email,
     username: schema.username,
+    nickname: schema.nickname,
   };
 }
 
@@ -25,8 +25,8 @@ export function toUserRead(
 ): z.infer<typeof UserRead> {
   return {
     id: db.id,
-    email: db.email,
     username: db.username,
+    nickname: db.nickname,
     createdAt: db.createdAt,
     updatedAt: db.updatedAt,
   };

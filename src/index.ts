@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import "dotenv/config";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { articleRoute } from "./routes/article.js";
@@ -19,9 +20,9 @@ app.route("/articles", articleRoute);
 
 app.doc("/openapi.json", {
   openapi: "3.0.0",
-  // @ts-expect-error
   info: {
     title: "Hono Ignition",
+    version: "0.0.0",
     description:
       "My personal Hono boilerplate for fast, consistent, and modern API.",
   },

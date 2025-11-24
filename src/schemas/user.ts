@@ -8,8 +8,8 @@ export const UserId = z
 
 export const UserBase = z.object({
   id: UserId.shape.id,
-  email: z.email(),
   username: z.string(),
+  nickname: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
