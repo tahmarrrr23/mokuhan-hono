@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
 import "dotenv/config";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -10,12 +11,6 @@ const app = new OpenAPIHono();
 
 app.get("/health", (c) => c.text("ok"));
 
-app.use("*", logger());
-app.use("*", cors());
-
-app.route("/users", userRoute);
-app.route("/articles", articleRoute);
-
 app.doc("/openapi.json", {
   openapi: "3.0.0",
   info: {
@@ -25,6 +20,14 @@ app.doc("/openapi.json", {
       "My personal Hono boilerplate for fast, consistent, and modern API.",
   },
 });
+
+app.get("/scalar", Scalar({ url: "/openapi.json" }));
+
+app.use("*", logger());
+app.use("*", cors());
+
+app.route("/users", userRoute);
+app.route("/articles", articleRoute);
 
 const server = serve({ fetch: app.fetch, port: 8080 }, (info) => {
   console.log(`Server is running on http://localhost:${info.port}`);
