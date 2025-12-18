@@ -1,10 +1,14 @@
 import type { z } from "@hono/zod-openapi";
-import type { Prisma } from "@prisma/client";
+import type {
+  UserCreateInput,
+  UserGetPayload,
+  UserUpdateInput,
+} from "../libs/prisma/models.js";
 import type { UserCreate, UserRead, UserUpdate } from "../schemas/user.js";
 
 export function toUserCreate(
   schema: z.infer<typeof UserCreate>,
-): Prisma.UserCreateInput {
+): UserCreateInput {
   return {
     username: schema.username,
     nickname: schema.nickname,
@@ -13,7 +17,7 @@ export function toUserCreate(
 
 export function toUserUpdate(
   schema: z.infer<typeof UserUpdate>,
-): Prisma.UserUpdateInput {
+): UserUpdateInput {
   return {
     username: schema.username,
     nickname: schema.nickname,
@@ -21,7 +25,7 @@ export function toUserUpdate(
 }
 
 export function toUserRead(
-  db: Prisma.UserGetPayload<undefined>,
+  db: UserGetPayload<undefined>,
 ): z.infer<typeof UserRead> {
   return {
     id: db.id,

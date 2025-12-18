@@ -9,7 +9,7 @@ export const UserId = z
 export const UserBase = z.object({
   id: UserId.shape.id,
   username: z.string(),
-  nickname: z.string(),
+  nickname: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

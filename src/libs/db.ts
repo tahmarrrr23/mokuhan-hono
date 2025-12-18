@@ -1,7 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaClient } from "./prisma/client.js";
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+const adapter = new PrismaMariaDb(process.env.DATABASE_URL as string);
 
-export const db = globalForPrisma.prisma || new PrismaClient();
+const db = new PrismaClient({ adapter });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+export { db };
