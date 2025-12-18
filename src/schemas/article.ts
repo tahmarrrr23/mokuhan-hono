@@ -1,14 +1,8 @@
 import { z } from "@hono/zod-openapi";
 import { UserRead } from "./user.js";
 
-export const ArticleId = z
-  .object({
-    id: z.cuid(),
-  })
-  .openapi("ArticleId");
-
 export const ArticleBase = z.object({
-  id: ArticleId.shape.id,
+  id: z.cuid(),
   title: z.string(),
   content: z.string().nullable(),
   createdAt: z.date(),

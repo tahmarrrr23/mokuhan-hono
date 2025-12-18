@@ -1,5 +1,5 @@
-import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
-import { UserCreate, UserId, UserRead, UserUpdate } from "../schemas/user.js";
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { UserCreate, UserRead, UserUpdate } from "../schemas/user.js";
 import { createUser, readUserById, updateUser } from "../services/user.js";
 
 const userRoute = new OpenAPIHono();
@@ -45,7 +45,9 @@ userRoute.openapi(
     path: "/{id}",
     tags: tags,
     request: {
-      params: UserId,
+      params: z.object({
+        id: UserRead.shape.id,
+      }),
     },
     responses: {
       200: {
@@ -72,7 +74,9 @@ userRoute.openapi(
     path: "/{id}",
     tags: tags,
     request: {
-      params: UserId,
+      params: z.object({
+        id: UserRead.shape.id,
+      }),
       body: {
         content: {
           "application/json": {
