@@ -10,6 +10,11 @@ import { userRoute } from "./routes/user.js";
 const app = new OpenAPIHono();
 
 app.get("/health", (c) => c.text("ok"));
+app.get("/scalar", Scalar({ url: "/openapi.json" }));
+app.use("*", logger());
+app.use("*", cors());
+app.route("/users", userRoute);
+app.route("/articles", articleRoute);
 
 app.doc("/openapi.json", {
   openapi: "3.0.0",
@@ -20,14 +25,6 @@ app.doc("/openapi.json", {
       "My personal Hono boilerplate for fast, consistent, and modern API.",
   },
 });
-
-app.get("/scalar", Scalar({ url: "/openapi.json" }));
-
-app.use("*", logger());
-app.use("*", cors());
-
-app.route("/users", userRoute);
-app.route("/articles", articleRoute);
 
 const server = serve({ fetch: app.fetch, port: 8080 }, (info) => {
   console.log(`Server is running on http://localhost:${info.port}`);
