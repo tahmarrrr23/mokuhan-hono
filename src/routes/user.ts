@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { BadRequest, InternalServerError } from "../schemas/error.js";
 import { UserCreate, UserRead, UserUpdate } from "../schemas/user.js";
 import { createUser, readUserById, updateUser } from "../services/user.js";
 
@@ -29,6 +30,8 @@ userRoute.openapi(
           },
         },
       },
+      400: BadRequest,
+      500: InternalServerError,
     },
   }),
   async (c) => {
@@ -58,6 +61,8 @@ userRoute.openapi(
           },
         },
       },
+      400: BadRequest,
+      500: InternalServerError,
     },
   }),
   async (c) => {
@@ -94,6 +99,8 @@ userRoute.openapi(
           },
         },
       },
+      400: BadRequest,
+      500: InternalServerError,
     },
   }),
   async (c) => {

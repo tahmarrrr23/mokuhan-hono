@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { ArticleRead } from "../schemas/article.js";
+import { BadRequest, InternalServerError } from "../schemas/error.js";
 import { readArticles } from "../services/article.js";
 
 const articleRoute = new OpenAPIHono();
@@ -20,6 +21,8 @@ articleRoute.openapi(
           },
         },
       },
+      400: BadRequest,
+      500: InternalServerError,
     },
   }),
   async (c) => {
