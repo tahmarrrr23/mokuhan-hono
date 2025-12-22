@@ -1,12 +1,13 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   ResponseBadRequest,
   ResponseInternalServerError,
 } from "../openapi/responses.js";
 import { UserCreate, UserRead, UserUpdate } from "../schemas/user.js";
 import { createUser, readUserById, updateUser } from "../services/user.js";
+import { createOpenApiHono } from "../utils/hono.js";
 
-const userRoute = new OpenAPIHono();
+const userRoute = createOpenApiHono();
 const tags = ["User"];
 
 // POST: /users

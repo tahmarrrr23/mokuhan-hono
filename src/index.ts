@@ -1,13 +1,13 @@
 import { serve } from "@hono/node-server";
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import "dotenv/config";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { articleRoute } from "./routes/article.js";
 import { userRoute } from "./routes/user.js";
+import { createOpenApiHono } from "./utils/hono.js";
 
-const app = new OpenAPIHono();
+const app = createOpenApiHono();
 
 app.get("/health", (c) => c.text("ok"));
 app.get("/scalar", Scalar({ url: "/openapi.json" }));
