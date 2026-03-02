@@ -10,20 +10,20 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.8",
-    "@hono/zod-openapi": "^1.2.0",
-    "@prisma/adapter-mariadb": "^7.2.0",
-    "@prisma/client": "^7.2.0",
-    "@scalar/hono-api-reference": "^0.9.32",
-    "dotenv": "^17.2.3",
-    "hono": "^4.11.3",
-    "zod": "^4.3.5"
+    "@hono/node-server": "^1.19.9",
+    "@hono/zod-openapi": "^1.2.2",
+    "@prisma/adapter-mariadb": "^7.4.2",
+    "@prisma/client": "^7.4.2",
+    "@scalar/hono-api-reference": "^0.9.47",
+    "dotenv": "^17.3.1",
+    "hono": "^4.12.3",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.11",
+    "@biomejs/biome": "^2.4.5",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "24",
-    "prisma": "^7.2.0",
+    "prisma": "^7.4.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
