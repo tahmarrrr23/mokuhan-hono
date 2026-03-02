@@ -19,7 +19,7 @@ app.route("/articles", articleRoute);
 app.doc("/openapi.json", {
   openapi: "3.0.0",
   info: {
-    title: "Hono Ignition",
+    title: "hono-mokuhan",
     version: "0.0.0",
     description:
       "My personal Hono boilerplate for fast, consistent, and modern API.",

@@ -1,3 +1,3 @@
-# Hono Ignition
+# hono-mokuhan
 
-My personal boilerplate for fast, consistent, and modern
+Time to pump out Hono projects.
