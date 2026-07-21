@@ -1,6 +1,5 @@
 {
   "name": "hono-mokuhan",
-  "private": true,
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -14,20 +13,20 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@hono/node-server": "^2.0.11",
-    "@hono/zod-openapi": "^1.5.1",
+    "@hono/node-server": "2.0.11",
+    "@hono/zod-openapi": "1.5.1",
     "@scalar/hono-api-reference": "^0.11.11",
     "dotenv": "^17.4.2",
-    "drizzle-orm": "rc",
-    "hono": "^4.12.31",
+    "drizzle-orm": "^0.45.2",
+    "hono": "4.12.31",
     "pg": "^8.16.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.5",
+    "@biomejs/biome": "2.5.5",
     "@types/node": "24",
     "@types/pg": "^8.15.5",
-    "drizzle-kit": "rc",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.1",
     "typescript": "5"
   },
