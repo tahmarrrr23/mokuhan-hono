@@ -302,6 +302,3 @@ dist
 # Ignore all local history of files
 .history
 .ionide
-
-### Other ###
-/src/libs/prisma
