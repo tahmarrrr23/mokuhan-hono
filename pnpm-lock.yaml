@@ -36,9 +36,6 @@ importers:
       '@biomejs/biome':
         specifier: ^2.4.12
         version: 2.4.12
-      '@total-typescript/tsconfig':
-        specifier: ^1.0.4
-        version: 1.0.4
       '@types/node':
         specifier: '24'
         version: 24.12.2
@@ -475,9 +472,6 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
-
-  '@total-typescript/tsconfig@1.0.4':
-    resolution: {integrity: sha512-fO4ctMPGz1kOFOQ4RCPBRBfMy3gDn+pegUfrGyUFRMv/Rd0ZM3/SHH3hFCYG4u6bPLG8OlmOGcBLDexvyr3A5w==}
 
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
@@ -1157,8 +1151,6 @@ snapshots:
       zod: 4.3.6
 
   '@standard-schema/spec@1.1.0': {}
-
-  '@total-typescript/tsconfig@1.0.4': {}
 
   '@types/geojson@7946.0.16': {}
 
