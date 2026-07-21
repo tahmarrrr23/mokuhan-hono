@@ -1,9 +1,12 @@
 import "dotenv/config";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import { PrismaClient } from "./prisma/client.js";
+import { drizzle } from "drizzle-orm/node-postgres";
 
-const adapter = new PrismaMariaDb(process.env.DATABASE_URL as string);
+const databaseUrl = process.env.DATABASE_URL;
 
-const db = new PrismaClient({ adapter });
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is not set");
+}
+
+const db = drizzle(databaseUrl);
 
 export { db };

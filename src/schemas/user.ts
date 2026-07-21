@@ -1,7 +1,7 @@
 import { z } from "@hono/zod-openapi";
 
 export const UserBase = z.object({
-  id: z.cuid(),
+  id: z.uuid(),
   username: z.string(),
   nickname: z.string().nullable(),
   createdAt: z.date(),

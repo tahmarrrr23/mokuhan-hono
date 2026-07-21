@@ -2,7 +2,7 @@ import { z } from "@hono/zod-openapi";
 import { UserRead } from "./user.js";
 
 export const ArticleBase = z.object({
-  id: z.cuid(),
+  id: z.uuid(),
   title: z.string(),
   content: z.string().nullable(),
   createdAt: z.date(),
