@@ -1,30 +1,15 @@
-import { serve } from "@hono/node-server";
 import "dotenv/config";
-import { cors } from "hono/cors";
-import { logger } from "hono/logger";
-import { articleRoute } from "./routes/article.js";
-import { userRoute } from "./routes/user.js";
-import { createOpenApiHono } from "./utils/hono.js";
 
-const app = createOpenApiHono();
+import { serve } from "@hono/node-server";
+import app from "./app.js";
 
-app.get("/health", (c) => c.text("ok"));
-app.use("*", logger());
-app.use("*", cors());
-app.route("/users", userRoute);
-app.route("/articles", articleRoute);
+const port = Number(process.env.PORT ?? 8000);
 
-app.doc("/openapi.json", {
-  openapi: "3.0.0",
-  info: {
-    title: "hono-mokuhan",
-    version: "0.0.0",
-    description:
-      "My personal Hono boilerplate for fast, consistent, and modern API.",
-  },
-});
+if (!Number.isInteger(port) || port < 1 || port > 65_535) {
+  throw new Error("PORT must be an integer between 1 and 65535");
+}
 
-const server = serve({ fetch: app.fetch, port: 8080 }, (info) => {
+const server = serve({ fetch: app.fetch, port }, (info) => {
   console.log(`Server is running on http://localhost:${info.port}`);
 });
 
