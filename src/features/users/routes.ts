@@ -3,7 +3,7 @@ import { errorResponseSchema } from "../../errors.js";
 import {
   createUserSchema,
   updateUserSchema,
-  userIdParamsSchema,
+  userIdSchema,
   userSchema,
 } from "./schemas.js";
 import {
@@ -47,7 +47,18 @@ const getUserRoute = createRoute({
   method: "get",
   path: "/{id}",
   tags: ["Users"],
-  request: { params: userIdParamsSchema },
+  request: {
+    params: z.object({
+      id: z.preprocess(Number, userIdSchema).openapi({
+        type: "number",
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
+  },
   responses: {
     200: {
       content: { "application/json": { schema: userSchema } },
@@ -121,7 +132,16 @@ const updateUserRoute = createRoute({
   path: "/{id}",
   tags: ["Users"],
   request: {
-    params: userIdParamsSchema,
+    params: z.object({
+      id: z.preprocess(Number, userIdSchema).openapi({
+        type: "number",
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
     body: {
       content: { "application/json": { schema: updateUserSchema } },
       required: true,
@@ -167,7 +187,18 @@ const deleteUserRoute = createRoute({
   method: "delete",
   path: "/{id}",
   tags: ["Users"],
-  request: { params: userIdParamsSchema },
+  request: {
+    params: z.object({
+      id: z.preprocess(Number, userIdSchema).openapi({
+        type: "number",
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
+  },
   responses: {
     204: { description: "User deleted" },
     500: {
