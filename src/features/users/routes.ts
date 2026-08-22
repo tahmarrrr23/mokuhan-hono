@@ -9,7 +9,7 @@ import {
 import {
   createUser,
   deleteUser,
-  findUser,
+  findUserById,
   listUsers,
   updateUser,
 } from "./service.js";
@@ -66,7 +66,7 @@ const getUserRoute = createRoute({
 
 usersRoutes.openapi(getUserRoute, async (c) => {
   const { id } = c.req.valid("param");
-  const user = await findUser(id);
+  const user = await findUserById(id);
 
   if (!user) {
     return c.json(
