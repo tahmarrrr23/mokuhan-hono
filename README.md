@@ -1,3 +1,3 @@
-# hono-mokuhan
+# mokuhan-hono
 
-Time to pump out Hono projects.
+Time to pump out Hono projects

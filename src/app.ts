@@ -11,7 +11,7 @@ app.route("/users", usersRoutes);
 app.doc31("/openapi.json", {
   openapi: "3.1.0",
   info: {
-    title: "hono-mokuhan",
+    title: "mokuhan-hono",
     version: "1.0.0",
   },
 });
