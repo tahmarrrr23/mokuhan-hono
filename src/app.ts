@@ -1,6 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { APP_NAME, APP_VERSION } from "./constants.js";
-import diceRoutes from "./features/dice/routes.js";
 import usersRoutes from "./features/users/routes.js";
 
 const app = new OpenAPIHono({
@@ -18,7 +17,6 @@ const app = new OpenAPIHono({
   },
 });
 
-app.route("/dice", diceRoutes);
 app.route("/users", usersRoutes);
 
 app.doc31("/openapi.json", {
