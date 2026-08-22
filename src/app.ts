@@ -1,54 +1,45 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { APP_NAME, APP_VERSION } from "./constants.js";
+import { errorSchema } from "./errors.js";
 import usersRoutes from "./features/users/routes.js";
 
 const app = new OpenAPIHono({
   defaultHook: (result, c) => {
     if (!result.success) {
       return c.json(
-        {
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Internal server error",
-          detail: {},
-        },
-        500,
+        errorSchema.parse({
+          code: "422",
+          message: "Validation failed",
+          detail: { issues: result.error.issues },
+        }),
+        400,
       );
     }
   },
 });
 
-app.route("/users", usersRoutes);
-
-app.doc31("/openapi.json", {
-  openapi: "3.1.0",
-  info: {
-    title: APP_NAME,
-    version: APP_VERSION,
-  },
-});
-
 app.notFound((c) =>
   c.json(
-    {
-      code: "INTERNAL_SERVER_ERROR",
+    errorSchema.parse({
+      code: "404",
+      message: "Not found",
+      detail: {},
+    }),
+    404,
+  ),
+);
+
+app.onError((_error, c) =>
+  c.json(
+    errorSchema.parse({
+      code: "500",
       message: "Internal server error",
       detail: {},
-    },
+    }),
     500,
   ),
 );
 
-app.onError((error, c) => {
-  console.error(error);
-  return c.json(
-    {
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Internal server error",
-      detail: {},
-    },
-    500,
-  );
-});
+app.route("/users", usersRoutes);
 
 export type AppType = typeof app;
 export default app;
