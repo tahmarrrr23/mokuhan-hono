@@ -1,5 +1,6 @@
 import { randomInt } from "node:crypto";
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { errorResponseSchema } from "../../errors.js";
 
 const diceRoutes = new OpenAPIHono();
 
@@ -17,6 +18,14 @@ const rollDiceRoute = createRoute({
         },
       },
       description: "Roll a six-sided die",
+    },
+    500: {
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+        },
+      },
+      description: "Internal server error",
     },
   },
 });

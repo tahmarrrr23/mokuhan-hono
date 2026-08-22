@@ -1,9 +1,22 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { HTTPException } from "hono/http-exception";
+import { APP_NAME, APP_VERSION } from "./constants.js";
 import diceRoutes from "./features/dice/routes.js";
 import usersRoutes from "./features/users/routes.js";
 
-const app = new OpenAPIHono();
+const app = new OpenAPIHono({
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      return c.json(
+        {
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal server error",
+          detail: {},
+        },
+        500,
+      );
+    }
+  },
+});
 
 app.route("/dice", diceRoutes);
 app.route("/users", usersRoutes);
@@ -11,27 +24,23 @@ app.route("/users", usersRoutes);
 app.doc31("/openapi.json", {
   openapi: "3.1.0",
   info: {
-    title: "mokuhan-hono",
-    version: "1.0.0",
+    title: APP_NAME,
+    version: APP_VERSION,
   },
 });
 
 app.notFound((c) =>
-  c.json({ code: "NOT_FOUND", message: "Not found", detail: {} }, 404),
+  c.json(
+    {
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal server error",
+      detail: {},
+    },
+    500,
+  ),
 );
 
 app.onError((error, c) => {
-  if (error instanceof HTTPException) {
-    return c.json(
-      {
-        code: "HTTP_ERROR",
-        message: error.message,
-        detail: {},
-      },
-      error.status,
-    );
-  }
-
   console.error(error);
   return c.json(
     {

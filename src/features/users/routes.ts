@@ -1,9 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import {
-  internalErrorResponse,
-  notFoundResponse,
-  validationErrorResponse,
-} from "../../errors.js";
+import { errorResponseSchema } from "../../errors.js";
 import {
   createUserSchema,
   updateUserSchema,
@@ -18,26 +14,9 @@ import {
   updateUser,
 } from "./service.js";
 
-const usersRoutes = new OpenAPIHono({
-  defaultHook: (result, c) => {
-    if (!result.success) {
-      return c.json(
-        {
-          code: "VALIDATION_ERROR",
-          message: "Invalid request",
-          detail: {
-            issues: result.error.issues.map((issue) => ({
-              path: issue.path.map(String).join("."),
-              message: issue.message,
-            })),
-          },
-        },
-        400,
-      );
-    }
-  },
-});
+const usersRoutes = new OpenAPIHono();
 
+// GET: /users
 const listUsersRoute = createRoute({
   method: "get",
   path: "/",
@@ -47,7 +26,14 @@ const listUsersRoute = createRoute({
       content: { "application/json": { schema: z.array(userSchema) } },
       description: "List users",
     },
-    500: internalErrorResponse,
+    500: {
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
   },
 });
 
@@ -56,6 +42,7 @@ usersRoutes.openapi(listUsersRoute, async (c) => {
   return c.json(users, 200);
 });
 
+// GET: /users/{id}
 const getUserRoute = createRoute({
   method: "get",
   path: "/{id}",
@@ -66,9 +53,14 @@ const getUserRoute = createRoute({
       content: { "application/json": { schema: userSchema } },
       description: "Get a user",
     },
-    400: validationErrorResponse,
-    404: notFoundResponse,
-    500: internalErrorResponse,
+    500: {
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
   },
 });
 
@@ -78,14 +70,19 @@ usersRoutes.openapi(getUserRoute, async (c) => {
 
   if (!user) {
     return c.json(
-      { code: "USER_NOT_FOUND", message: "User not found", detail: {} },
-      404,
+      {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Internal server error",
+        detail: {},
+      },
+      500,
     );
   }
 
   return c.json(user, 200);
 });
 
+// POST: /users
 const createUserRoute = createRoute({
   method: "post",
   path: "/",
@@ -101,8 +98,14 @@ const createUserRoute = createRoute({
       content: { "application/json": { schema: userSchema } },
       description: "User created",
     },
-    400: validationErrorResponse,
-    500: internalErrorResponse,
+    500: {
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
   },
 });
 
@@ -112,6 +115,7 @@ usersRoutes.openapi(createUserRoute, async (c) => {
   return c.json(user, 201);
 });
 
+// PATCH: /users/{id}
 const updateUserRoute = createRoute({
   method: "patch",
   path: "/{id}",
@@ -128,9 +132,14 @@ const updateUserRoute = createRoute({
       content: { "application/json": { schema: userSchema } },
       description: "User updated",
     },
-    400: validationErrorResponse,
-    404: notFoundResponse,
-    500: internalErrorResponse,
+    500: {
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
   },
 });
 
@@ -141,14 +150,19 @@ usersRoutes.openapi(updateUserRoute, async (c) => {
 
   if (!user) {
     return c.json(
-      { code: "USER_NOT_FOUND", message: "User not found", detail: {} },
-      404,
+      {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Internal server error",
+        detail: {},
+      },
+      500,
     );
   }
 
   return c.json(user, 200);
 });
 
+// DELETE: /users/{id}
 const deleteUserRoute = createRoute({
   method: "delete",
   path: "/{id}",
@@ -156,9 +170,14 @@ const deleteUserRoute = createRoute({
   request: { params: userIdParamsSchema },
   responses: {
     204: { description: "User deleted" },
-    400: validationErrorResponse,
-    404: notFoundResponse,
-    500: internalErrorResponse,
+    500: {
+      content: {
+        "application/json": {
+          schema: errorResponseSchema,
+        },
+      },
+      description: "Internal server error",
+    },
   },
 });
 
@@ -168,8 +187,12 @@ usersRoutes.openapi(deleteUserRoute, async (c) => {
 
   if (!user) {
     return c.json(
-      { code: "USER_NOT_FOUND", message: "User not found", detail: {} },
-      404,
+      {
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Internal server error",
+        detail: {},
+      },
+      500,
     );
   }
 

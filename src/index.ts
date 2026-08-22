@@ -2,16 +2,18 @@ import "dotenv/config";
 
 import { serve } from "@hono/node-server";
 import app from "./app.js";
+import { HOSTNAME, PORT } from "./constants.js";
 
-const port = Number(process.env.PORT ?? 8000);
-
-if (!Number.isInteger(port) || port < 1 || port > 65_535) {
-  throw new Error("PORT must be an integer between 1 and 65535");
-}
-
-const server = serve({ fetch: app.fetch, port }, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`);
-});
+const server = serve(
+  {
+    fetch: app.fetch,
+    port: Number(process.env.PORT ?? PORT),
+    hostname: process.env.HOSTNAME ?? HOSTNAME,
+  },
+  (info) => {
+    console.log(`Server is running on http://localhost:${info.port}`);
+  },
+);
 
 process.on("SIGINT", () => {
   server.close();
