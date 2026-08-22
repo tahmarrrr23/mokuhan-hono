@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { errorResponseSchema } from "../../errors.js";
+import { errorSchema } from "../../errors.js";
 import {
   createUserSchema,
   updateUserSchema,
@@ -29,7 +29,7 @@ const listUsersRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: errorResponseSchema,
+          schema: errorSchema,
         },
       },
       description: "Internal server error",
@@ -67,7 +67,7 @@ const getUserRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: errorResponseSchema,
+          schema: errorSchema,
         },
       },
       description: "Internal server error",
@@ -112,7 +112,7 @@ const createUserRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: errorResponseSchema,
+          schema: errorSchema,
         },
       },
       description: "Internal server error",
@@ -155,7 +155,7 @@ const updateUserRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: errorResponseSchema,
+          schema: errorSchema,
         },
       },
       description: "Internal server error",
@@ -204,7 +204,7 @@ const deleteUserRoute = createRoute({
     500: {
       content: {
         "application/json": {
-          schema: errorResponseSchema,
+          schema: errorSchema,
         },
       },
       description: "Internal server error",
