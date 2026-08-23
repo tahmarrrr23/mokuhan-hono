@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { errorSchema } from "../../errors.js";
+import { toUserResponse } from "./mappers.js";
 import {
   createUserSchema,
   updateUserSchema,
@@ -39,7 +40,7 @@ const listUsersRoute = createRoute({
 
 usersRoutes.openapi(listUsersRoute, async (c) => {
   const users = await listUsers();
-  return c.json(users, 200);
+  return c.json(users.map(toUserResponse), 200);
 });
 
 // GET: /users/{id}
@@ -90,7 +91,7 @@ usersRoutes.openapi(getUserRoute, async (c) => {
     );
   }
 
-  return c.json(user, 200);
+  return c.json(toUserResponse(user), 200);
 });
 
 // POST: /users
@@ -123,7 +124,7 @@ const createUserRoute = createRoute({
 usersRoutes.openapi(createUserRoute, async (c) => {
   const { name } = c.req.valid("json");
   const user = await createUser(name);
-  return c.json(user, 201);
+  return c.json(toUserResponse(user), 201);
 });
 
 // PATCH: /users/{id}
@@ -179,7 +180,7 @@ usersRoutes.openapi(updateUserRoute, async (c) => {
     );
   }
 
-  return c.json(user, 200);
+  return c.json(toUserResponse(user), 200);
 });
 
 // DELETE: /users/{id}
