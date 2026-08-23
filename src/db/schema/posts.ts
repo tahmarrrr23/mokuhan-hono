@@ -16,3 +16,6 @@ export const postsTable = snakeCase.table(
   }),
   (table) => [index().on(table.authorId)],
 );
+
+export type PostRow = typeof postsTable.$inferSelect;
+export type NewPostRow = typeof postsTable.$inferInsert;

@@ -165,8 +165,8 @@ const updateUserRoute = createRoute({
 
 usersRoutes.openapi(updateUserRoute, async (c) => {
   const { id } = c.req.valid("param");
-  const values = c.req.valid("json");
-  const user = await updateUser(id, values);
+  const { name } = c.req.valid("json");
+  const user = await updateUser(id, name);
 
   if (!user) {
     return c.json(
