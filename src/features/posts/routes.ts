@@ -3,11 +3,9 @@ import { errorSchema } from "../../errors.js";
 import { toPostResponse } from "./mappers.js";
 import {
   createPostSchema,
-  listPostsQuerySchema,
-  postIdParamsSchema,
+  postIdSchema,
   postSchema,
   updatePostSchema,
-  userIdParamsSchema,
 } from "./schemas.js";
 import {
   createPost,
@@ -24,8 +22,32 @@ const listPostsRoute = createRoute({
   path: "/{userId}/posts",
   tags: ["Posts"],
   request: {
-    params: userIdParamsSchema,
-    query: listPostsQuerySchema,
+    params: z.object({
+      userId: z.preprocess(Number, z.number()).openapi({
+        type: "number",
+        param: {
+          name: "userId",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
+    query: z.object({
+      isDraft: z
+        .preprocess((value) => {
+          if (value === "true") return true;
+          if (value === "false") return false;
+          return value;
+        }, z.boolean())
+        .openapi({
+          type: "boolean",
+          param: {
+            name: "isDraft",
+            in: "query",
+          },
+        })
+        .optional(),
+    }),
   },
   responses: {
     200: {
@@ -63,7 +85,24 @@ const getPostRoute = createRoute({
   path: "/{userId}/posts/{postId}",
   tags: ["Posts"],
   request: {
-    params: postIdParamsSchema,
+    params: z.object({
+      userId: z.preprocess(Number, z.number()).openapi({
+        type: "number",
+        param: {
+          name: "userId",
+          in: "path",
+          required: true,
+        },
+      }),
+      postId: z.preprocess(Number, postIdSchema).openapi({
+        type: "number",
+        param: {
+          name: "postId",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
   },
   responses: {
     200: {
@@ -100,7 +139,16 @@ const createPostRoute = createRoute({
   path: "/{userId}/posts",
   tags: ["Posts"],
   request: {
-    params: userIdParamsSchema,
+    params: z.object({
+      userId: z.preprocess(Number, z.number()).openapi({
+        type: "number",
+        param: {
+          name: "userId",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
     body: {
       content: { "application/json": { schema: createPostSchema } },
       required: true,
@@ -142,7 +190,24 @@ const updatePostRoute = createRoute({
   path: "/{userId}/posts/{postId}",
   tags: ["Posts"],
   request: {
-    params: postIdParamsSchema,
+    params: z.object({
+      userId: z.preprocess(Number, z.number()).openapi({
+        type: "number",
+        param: {
+          name: "userId",
+          in: "path",
+          required: true,
+        },
+      }),
+      postId: z.preprocess(Number, postIdSchema).openapi({
+        type: "number",
+        param: {
+          name: "postId",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
     body: {
       content: { "application/json": { schema: updatePostSchema } },
       required: true,
@@ -184,7 +249,24 @@ const deletePostRoute = createRoute({
   path: "/{userId}/posts/{postId}",
   tags: ["Posts"],
   request: {
-    params: postIdParamsSchema,
+    params: z.object({
+      userId: z.preprocess(Number, z.number()).openapi({
+        type: "number",
+        param: {
+          name: "userId",
+          in: "path",
+          required: true,
+        },
+      }),
+      postId: z.preprocess(Number, postIdSchema).openapi({
+        type: "number",
+        param: {
+          name: "postId",
+          in: "path",
+          required: true,
+        },
+      }),
+    }),
   },
   responses: {
     204: { description: "Post deleted" },
