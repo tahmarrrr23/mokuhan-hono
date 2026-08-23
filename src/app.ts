@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { errorSchema } from "./errors.js";
+import postsRoutes from "./features/posts/routes.js";
 import usersRoutes from "./features/users/routes.js";
 
 const app = new OpenAPIHono({
@@ -40,6 +41,7 @@ app.onError((_error, c) =>
 );
 
 app.route("/users", usersRoutes);
+app.route("/users", postsRoutes);
 
 export type AppType = typeof app;
 export default app;
