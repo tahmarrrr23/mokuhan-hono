@@ -1,9 +1,13 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { postsTable } from "../../db/schema/posts.js";
-import type { CreatePost, UpdatePost } from "./schemas.js";
+import { toPostResponse } from "./mappers.js";
+import type { CreatePost, Post, UpdatePost } from "./schemas.js";
 
-export async function listPostsByAuthorId(authorId: number, isDraft?: boolean) {
+export async function listPostsByAuthorId(
+  authorId: Post["author"]["id"],
+  isDraft?: Post["isDraft"],
+): Promise<Post[] | undefined> {
   const author = await db.query.users.findFirst({
     columns: {
       id: true,
@@ -24,17 +28,14 @@ export async function listPostsByAuthorId(authorId: number, isDraft?: boolean) {
 
   if (!author) return undefined;
 
-  return author.posts.map((post) => ({
-    ...post,
-    author: {
-      id: author.id,
-      name: author.name,
-    },
-  }));
+  return author.posts.map((post) => toPostResponse({ ...post, author }));
 }
 
-export async function findPostByIdAndAuthorId(id: number, authorId: number) {
-  return db.query.posts.findFirst({
+export async function findPostByIdAndAuthorId(
+  id: Post["id"],
+  authorId: Post["author"]["id"],
+): Promise<Post | undefined> {
+  const post = await db.query.posts.findFirst({
     where: {
       id,
       authorId,
@@ -48,9 +49,13 @@ export async function findPostByIdAndAuthorId(id: number, authorId: number) {
       },
     },
   });
+  return post && toPostResponse(post);
 }
 
-export async function createPost(authorId: number, input: CreatePost) {
+export async function createPost(
+  authorId: Post["author"]["id"],
+  input: CreatePost,
+): Promise<Post | undefined> {
   return db.transaction(async (tx) => {
     const author = await tx.query.users.findFirst({
       columns: {
@@ -74,15 +79,15 @@ export async function createPost(authorId: number, input: CreatePost) {
       })
       .returning();
 
-    return { ...post, author };
+    return toPostResponse({ ...post, author });
   });
 }
 
 export async function updatePostByIdAndAuthorId(
-  id: number,
-  authorId: number,
+  id: Post["id"],
+  authorId: Post["author"]["id"],
   input: UpdatePost,
-) {
+): Promise<Post | undefined> {
   return db.transaction(async (tx) => {
     const author = await tx.query.users.findFirst({
       columns: {
@@ -104,14 +109,17 @@ export async function updatePostByIdAndAuthorId(
 
     if (!post) return undefined;
 
-    return { ...post, author };
+    return toPostResponse({ ...post, author });
   });
 }
 
-export async function deletePostByIdAndAuthorId(id: number, authorId: number) {
+export async function deletePostByIdAndAuthorId(
+  id: Post["id"],
+  authorId: Post["author"]["id"],
+): Promise<boolean> {
   const [post] = await db
     .delete(postsTable)
     .where(and(eq(postsTable.id, id), eq(postsTable.authorId, authorId)))
     .returning({ id: postsTable.id });
-  return post;
+  return post !== undefined;
 }

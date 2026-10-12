@@ -1,6 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { errorSchema } from "../../errors.js";
-import { toPostResponse } from "./mappers.js";
 import {
   createPostSchema,
   postIdSchema,
@@ -77,7 +76,7 @@ postsRoutes.openapi(listPostsRoute, async (c) => {
     );
   }
 
-  return c.json(posts.map(toPostResponse), 200);
+  return c.json(posts, 200);
 });
 
 const getPostRoute = createRoute({
@@ -131,7 +130,7 @@ postsRoutes.openapi(getPostRoute, async (c) => {
     );
   }
 
-  return c.json(toPostResponse(post), 200);
+  return c.json(post, 200);
 });
 
 const createPostRoute = createRoute({
@@ -182,7 +181,7 @@ postsRoutes.openapi(createPostRoute, async (c) => {
     );
   }
 
-  return c.json(toPostResponse(post), 201);
+  return c.json(post, 201);
 });
 
 const updatePostRoute = createRoute({
@@ -241,7 +240,7 @@ postsRoutes.openapi(updatePostRoute, async (c) => {
     );
   }
 
-  return c.json(toPostResponse(post), 200);
+  return c.json(post, 200);
 });
 
 const deletePostRoute = createRoute({
@@ -279,9 +278,9 @@ const deletePostRoute = createRoute({
 
 postsRoutes.openapi(deletePostRoute, async (c) => {
   const { userId, postId } = c.req.valid("param");
-  const post = await deletePostByIdAndAuthorId(postId, userId);
+  const isDeleted = await deletePostByIdAndAuthorId(postId, userId);
 
-  if (!post) {
+  if (!isDeleted) {
     return c.json(
       {
         code: "INTERNAL_SERVER_ERROR",
