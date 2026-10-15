@@ -34,7 +34,7 @@ importers:
         specifier: 2.5.13
         version: 2.5.13
       '@types/node':
-        specifier: ^24.13.4
+        specifier: '24'
         version: 24.13.4
       '@types/pg':
         specifier: ^8.23.1
